@@ -1,0 +1,3 @@
+C:/Users/PC/Desktop/win_usvc/usvc_navi/build/CMakeFiles/usvc_navi.dir
+C:/Users/PC/Desktop/win_usvc/usvc_navi/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/PC/Desktop/win_usvc/usvc_navi/build/CMakeFiles/ZERO_CHECK.dir
