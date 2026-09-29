@@ -3,9 +3,9 @@
 #include <queue>      // 队列库
 #include <vector>     // 动态数组库
 
-#include "NavData/NavData.h"
+#include "NavData.h"
 extern "C" {
-#include "usvc_communication/MTLink/MTLink_DataStruct.h" 
+#include "MTLink_DataStruct.h" 
 }
 
 // --- 定义一个结构体，用来打包每一条透传指令 ---
@@ -74,11 +74,11 @@ public:
         //Lidar读取
     MDATA_SHIP_LidarData_t ReadPointCloud() const {
         std::shared_lock<std::shared_mutex> lk(mtx_);
-        return latest_cloud_; 
+        return lidar_data_; 
     }
     void WritePointCloud(MDATA_SHIP_LidarData_t cloud) {
         std::unique_lock<std::shared_mutex> lk(mtx_);
-        latest_cloud_ = cloud;
+        lidar_data_ = cloud;
     }
 
         // 供 (upper_node) 调用：把指令塞进队列尾部

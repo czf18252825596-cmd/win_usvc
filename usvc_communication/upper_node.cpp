@@ -11,19 +11,11 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
-#include <unistd.h>       // 用于获取当前路径
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl/filters/conditional_removal.h>
-#include <pcl/filters/passthrough.h>
-#include <pcl/filters/voxel_grid.h>
-#include <pcl/search/kdtree.h>
-#include <pcl/segmentation/extract_clusters.h>
 
 #include <thread>
 #include <functional>
 
+#include "upper_node.h"
 #include "config_manager_tool/config_manager_tool.h"
 
 extern "C" {
@@ -37,22 +29,22 @@ using boost::asio::ip::address;
 using boost::asio::buffer;
 using boost::asio::socket_base;
 
-static int BROAD_PORT;
-static int DEVICE_ID;
-static int DEVICE_PORT;
-static std::string DEVICE_TYPE;
-static std::string DEVICE_SN;
+// static int BROAD_PORT;
+// static int DEVICE_ID;
+// static int DEVICE_PORT;
+// static std::string DEVICE_TYPE;
+// static std::string DEVICE_SN;
 
-static MTLink_t g_MTLink_upper = {0};
+// static MTLink_t g_MTLink_upper = {0};
 
 static std::vector<uint8_t> g_json_buffer; // 全局缓冲区用于累积JSON数据
 
-static std::mutex upper_clients_mutex; 
-static std::vector<std::shared_ptr<tcp::socket>> upper_clients; //上位机客户端连接池
-static std::mutex upper_clients_to_remove_mutex;
-static std::vector<size_t> upper_clients_to_remove; //上位机客户端连接移除标志
+// static std::mutex upper_clients_mutex; 
+// static std::vector<std::shared_ptr<tcp::socket>> upper_clients; //上位机客户端连接池
+// static std::mutex upper_clients_to_remove_mutex;
+// static std::vector<size_t> upper_clients_to_remove; //上位机客户端连接移除标志
 
-static std::atomic<bool> g_running{true};
+// static std::atomic<bool> g_running{true};
 static void signalHandler(int) {
     g_running = false;
 }
@@ -410,12 +402,12 @@ static void tcpsUpperJsonThread()
 int main(int argc, char** argv) 
 {   
     Config config; 
-    if (!config.Load("common/Config/setting.ini")) {
-        std::cerr << "读取配置失败: Config/setting.ini\n" ;
+    if (!config.Load("common/Config/config.yaml")) {
+        std::cerr << "读取配置失败: Config/config.yaml\n" ;
         return 1;
     }
 
-    BROAD_PORT  = config.Get<int>("upper", "BROAD_PORT", 5000); // 注意ini里的section名
+    BROAD_PORT  = config.Get<int>("upper", "BROAD_PORT", 5000); 
     DEVICE_ID   = config.Get<int>("ship", "DEVICE_ID", 0);
     DEVICE_PORT = config.Get<int>("ship", "DEVICE_PORT", 5001);
     DEVICE_TYPE = config.Get<std::string>("ship", "DEVICE_TYPE", "ship_calc");

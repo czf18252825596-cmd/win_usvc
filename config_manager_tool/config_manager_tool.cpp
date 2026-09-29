@@ -142,13 +142,13 @@ static bool updateParamInFileInternal(const std::string& config_file,
                                      const std::string& param_value,
                                      bool isStringType = false) {
     
-    ROS_DEBUG("[ConfigManager] Saving %s = %s to %s", 
+    printf("DEBUG——[ConfigManager] Saving %s = %s to %s", 
               param_name.c_str(), param_value.c_str(), config_file.c_str());
     
     // ========== 1. 写入文件 ==========
     std::ifstream in_file(config_file);
     if (!in_file.is_open()) {
-        ROS_ERROR("[ConfigManager] Cannot open file for reading: %s", config_file.c_str());
+        printf("ERROR——[ConfigManager] Cannot open file for reading: %s", config_file.c_str());
         return false;
     }
     
@@ -173,7 +173,7 @@ static bool updateParamInFileInternal(const std::string& config_file,
     size_t line_index;
     std::string indent_str;
     if (!findYamlPathInLines(lines, param_name, line_index, indent_str)) {
-        ROS_ERROR("[ConfigManager] Parameter '%s' not found in %s", 
+        printf("ERROR——[ConfigManager] Parameter '%s' not found in %s", 
                   param_name.c_str(), config_file.c_str());
         return false;
     }
@@ -191,12 +191,12 @@ static bool updateParamInFileInternal(const std::string& config_file,
     lines[line_index] = new_line;
     found = true;
     
-    ROS_DEBUG("[ConfigManager] Updated line %zu: %s", line_index, new_line.c_str());
+    printf("DEBUG——[ConfigManager] Updated line %zu: %s", line_index, new_line.c_str());
     
     // 写入文件
     std::ofstream out_file(config_file);
     if (!out_file.is_open()) {
-        ROS_ERROR("[ConfigManager] Cannot open file for writing: %s", config_file.c_str());
+        printf("ERROR——[ConfigManager] Cannot open file for writing: %s", config_file.c_str());
         return false;
     }
     
@@ -214,13 +214,12 @@ static bool updateParamInFileInternal(const std::string& config_file,
     }
     
     if (!found) {
-        ROS_ERROR("[ConfigManager] Failed to update parameter '%s'", param_name.c_str());
+        printf("ERROR——[ConfigManager] Failed to update parameter '%s'", param_name.c_str());
         return false;
     }
     
     // ========== 2. 同步到参数服务器 ==========
-    ros::param::set(param_name, param_value); // 参数服务器保持原始值（不带引号）
-    ROS_DEBUG("[ConfigManager] Synced %s to param server", param_name.c_str());
+    printf("DEBUG——[ConfigManager] Synced %s to param server", param_name.c_str());
     
     return true;
 }
@@ -283,7 +282,7 @@ bool ConfigManagerTool::getParamFromFile(const std::string& config_file,
     
     std::ifstream file(config_file);
     if (!file.is_open()) {
-        ROS_ERROR("[ConfigManager] Cannot open file for reading: %s", config_file.c_str());
+        printf("ERROR——[ConfigManager] Cannot open file for reading: %s", config_file.c_str());
         return false;
     }
     
@@ -298,7 +297,7 @@ bool ConfigManagerTool::getParamFromFile(const std::string& config_file,
     size_t line_index;
     std::string indent_str;
     if (!findYamlPathInLines(lines, param_name, line_index, indent_str)) {
-        ROS_WARN("[ConfigManager] Parameter '%s' not found in %s", 
+        printf("WARN——[ConfigManager] Parameter '%s' not found in %s", 
                  param_name.c_str(), config_file.c_str());
         return false;
     }
@@ -370,7 +369,7 @@ bool ConfigManagerTool::hasParameter(const std::string& config_file,
 }
 
 bool ConfigManagerTool::executeCommand(const std::string& command) {
-    ROS_WARN("[ConfigManager] executeCommand is deprecated, using direct file access instead");
+    printf("WARN——[ConfigManager] executeCommand is deprecated, using direct file access instead");
     int result = std::system(command.c_str());
     return result == 0;
 }

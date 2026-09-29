@@ -21,12 +21,14 @@ public:
     // 初始化雷达环境 (传入一个 config.json 配置文件的路径)
     bool Init(const std::string& config_path);
 
-private:
     // 静态(static)函数。
     static void PointCloudCallback(uint32_t handle, 
                                    const uint8_t dev_type, 
                                    LivoxLidarEthernetPacket* data, 
                                    void* client_data);
 
+
+private:
+    
     SharedState& shared_state_; 
 };

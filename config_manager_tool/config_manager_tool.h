@@ -1,7 +1,6 @@
 #ifndef CONFIG_MANAGER_TOOL_H
 #define CONFIG_MANAGER_TOOL_H
 
-#include <ros/ros.h>
 #include <string>
 #include <map>
 
